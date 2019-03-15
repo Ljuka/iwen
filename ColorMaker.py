@@ -1,5 +1,6 @@
 import os
 import shutil
+import re
 
 def createStartFolderStructure(path):
     if os.path.isdir(path+'/Iwen Colours'):
@@ -21,7 +22,7 @@ def makeColourCodeForIOS(path, colours):
 
             # Setting name to be #hex format if colour name is empty
             if colour['name'] != '':
-                colourName = colour['name']
+                colourName = trimName(colour['name'])
             else:
                 colourName = 'colour_'+str(convertToHex(r) + convertToHex(g) + convertToHex(b))
 
@@ -45,7 +46,7 @@ def makeColourPaletteXcassets(path, colours):
         if colour['name'] == '':
             colourName = 'colour_'+str(convertToHex(r)+convertToHex(g)+convertToHex(b))
         else:
-            colourName = colour['name']
+            colourName = trimName(colour['name'])
         os.mkdir(path+'/Iwen Colours/IOS/Colours.xcassets/'+colourName+'.colorset') # make colorset folder
 
         # Make Contents.json file in colorset folder`
@@ -68,7 +69,7 @@ def makeColourCodeForAndroid(path, colours):
         hexColour = "#"+alpha+str(convertToHex(r) + convertToHex(g) + convertToHex(b))
 
         #Setting name to be colour_#ARGB format if colour name is empty
-        colourName = colour['name'] if colour['name'] != '' else 'color_'+hexColour.replace('#', '')
+        colourName = trimName(colour['name']) if colour['name'] != '' else 'color_'+hexColour.replace('#', '')
 
         file.write('\r\n\t<color name="'+colourName+'">'+hexColour+'</color>')
 
@@ -86,3 +87,6 @@ def zipdir(path, ziph):
 def removeUnzippedDir(path):
     if os.path.isdir(path+'/Iwen Colours'):
          shutil.rmtree(path+'/Iwen Colours')
+
+def trimName(name):
+    return re.sub('[^A-Za-z]+', '', name)
