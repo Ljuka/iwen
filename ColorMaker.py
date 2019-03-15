@@ -89,4 +89,5 @@ def removeUnzippedDir(path):
          shutil.rmtree(path+'/Iwen Colours')
 
 def trimName(name):
-    return re.sub('[^A-Za-z]+', '', name)
+    trimmedName = re.sub('[^A-Za-z]+', '', name)
+    return trimmedName[0].lower() + trimmedName[1:]
