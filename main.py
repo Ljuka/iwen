@@ -38,6 +38,14 @@ def openFileForExport(self):
                             colours = parsedColourFile['resources']['meta']['ux']['documentLibrary']['elements']
                             ColorMaker.makeColourCodeForIOS(exportPath, colours)
                             ColorMaker.makeColourPaletteXcassets(exportPath, colours)
+                            ColorMaker.makeJsonFile(exportPath, colours)
+
+                            clr = ColorMaker.makeClrFile(exportPath)
+                            if clr != "OK":
+                                messagebox.showerror("Error", clr)
+                                ColorMaker.removeUnzippedDir(exportPath)
+                                exit()
+
                             ColorMaker.makeColourCodeForAndroid(exportPath, colours)
                             shutil.make_archive(exportPath + '/Iwen Colours', 'zip', exportPath + '/Iwen Colours')
                             ColorMaker.removeUnzippedDir(exportPath)
@@ -48,7 +56,6 @@ def openFileForExport(self):
                                 os.startfile(exportPath)
                             except:
                                 os.system(f'open {os.path.realpath(exportPath)}')
-
                     #         Reset buttons
                             importFilePath = ''
                             exportPath = ''

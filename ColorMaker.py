@@ -1,6 +1,7 @@
 import os
 import shutil
 import re
+import math
 
 def createStartFolderStructure(path):
     if os.path.isdir(path+'/Iwen Colours'):
@@ -63,7 +64,7 @@ def makeColourCodeForAndroid(path, colours):
         r = colour['representations'][0]['content']['value']['r']
         g = colour['representations'][0]['content']['value']['g']
         b = colour['representations'][0]['content']['value']['b']
-        alpha = "" if 'alpha' not in colour['representations'][0]['content'] else convertToHex(int(colour['representations'][0]['content']['alpha']*255))
+        alpha = "" if 'alpha' not in colour['representations'][0]['content'] else convertToHex(int(math.floor(colour['representations'][0]['content']['alpha']*255)))
 
         # Colour in #ARGB format
         hexColour = "#"+alpha+str(convertToHex(r) + convertToHex(g) + convertToHex(b))
@@ -74,6 +75,41 @@ def makeColourCodeForAndroid(path, colours):
         file.write('\r\n\t<color name="'+colourName+'">'+hexColour+'</color>')
 
     file.write('\r\n</resources>')
+
+def makeJsonFile(path, colours):
+    file = open(path + '/colours.json', 'w+')
+    file.write('[')
+    a = 0
+    for colour in colours:
+        # Color in r g b and alpha
+        r = colour['representations'][0]['content']['value']['r']
+        g = colour['representations'][0]['content']['value']['g']
+        b = colour['representations'][0]['content']['value']['b']
+        alpha = "1.000" if 'alpha' not in colour['representations'][0]['content'] else str(round(colour['representations'][0]['content']['alpha'], 3))
+
+        # Colour in #ARGB format
+        hexColour = str(convertToHex(r) + convertToHex(g) + convertToHex(b))
+
+        # Setting name to be colour_#ARGB format if colour name is empty
+        colourName = trimName(colour['name']) if colour['name'] != '' else 'color_' + hexColour
+
+        if a > 0:
+            file.write(',')
+        a = 1
+
+        file.write('\r\n\t{ "name": "' + colourName + '", "r": "' + str(r) + '", "g": "' + str(g) + '", "b": "' + str(b) + '", "a": "' + alpha + '" }')
+
+    file.write('\r\n]')
+
+def makeClrFile(path):
+    command = 'swift -suppress-warnings makeClrFile.swift -n "iwenColours" -i '+path+'/colours.json -o '+path+'/Iwen\ Colours/IOS'
+    process = os.popen(command)
+    results = str(process.read())
+    os.remove(path + "/colours.json")
+    if results == "SUCCESS\n":
+        return "OK"
+    else:
+        return results
 
 def convertToHex(decimalNumber):
     return "00" if decimalNumber <= 0 else hex(decimalNumber).lstrip("0x").rstrip("L")
