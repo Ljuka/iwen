@@ -38,13 +38,14 @@ def openFileForExport(self):
                             colours = parsedColourFile['resources']['meta']['ux']['documentLibrary']['elements']
                             ColorMaker.makeColourCodeForIOS(exportPath, colours)
                             ColorMaker.makeColourPaletteXcassets(exportPath, colours)
-                            ColorMaker.makeJsonFile(exportPath, colours)
+                            if os.name == "posix":
+                                ColorMaker.makeJsonFile(exportPath, colours)
 
-                            clr = ColorMaker.makeClrFile(exportPath)
-                            if clr != "OK":
-                                messagebox.showerror("Error", clr)
-                                ColorMaker.removeUnzippedDir(exportPath)
-                                exit()
+                                clr = ColorMaker.makeClrFile(exportPath)
+                                if clr != "OK":
+                                    messagebox.showerror("Error", clr)
+                                    ColorMaker.removeUnzippedDir(exportPath)
+                                    exit()
 
                             ColorMaker.makeColourCodeForAndroid(exportPath, colours)
                             shutil.make_archive(exportPath + '/Iwen Colours', 'zip', exportPath + '/Iwen Colours')
@@ -94,7 +95,6 @@ exportBttn = Button(root, text="Generate colours", highlightbackground='#4436af'
 exportBttn.place(relx=.5, rely=.7, anchor="center")
 exportBttn.config(height=3, width=22)
 exportBttn.bind("<Button-1>", openFileForExport)
-
 
 
 

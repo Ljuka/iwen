@@ -3,6 +3,7 @@ import shutil
 import re
 import math
 
+
 def createStartFolderStructure(path):
     if os.path.isdir(path+'/Iwen Colours'):
          shutil.rmtree(path+'/Iwen Colours')
