@@ -110,7 +110,10 @@ def makeClrFile(path):
     if results == "SUCCESS\n":
         return "OK"
     else:
-        return results
+        if results.split(' ', 1)[0] == "xcode-select:":
+            return "X"
+        else:
+            return results
 
 def convertToHex(decimalNumber):
     return "00" if decimalNumber <= 0 else hex(decimalNumber).lstrip("0x").rstrip("L")

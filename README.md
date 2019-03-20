@@ -34,7 +34,7 @@ Click **New** to add new variable and put python installation path (in my case i
 
 For MacOS just make sure your Python is up to date - to have version 3.x 
 
-Additionally you can install Xcode to get Swift language. 
+Additionally you can install Xcode to get Swift language so you can create .clr file. 
 To install it [click here](https://itunes.apple.com/us/app/xcode/id497799835)
 
 ## Installing and Running
