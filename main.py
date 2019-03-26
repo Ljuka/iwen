@@ -42,7 +42,7 @@ def openFileForExport(self):
                                 ColorMaker.makeJsonFile(exportPath, colours)
 
                                 clr = ColorMaker.makeClrFile(exportPath)
-                                if clr != "OK" or clr != "X":
+                                if clr != "OK" and clr != "X":
                                     messagebox.showerror("Error", clr)
                                     ColorMaker.removeUnzippedDir(exportPath)
                                     exit()
